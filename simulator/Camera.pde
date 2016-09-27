@@ -34,7 +34,7 @@ class Camera {
     translate (width / 2.0, height / 2.0, -50);
     
     // rotate frame
-    //rotateY (this.rotX);
+    rotateY (this.rotX);
     rotateX (this.rotY);
     
     // translate set amount

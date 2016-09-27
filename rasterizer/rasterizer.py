@@ -11,7 +11,11 @@ from structs.vector import Vector
 print 'building scenes..'
 scenes = []
 for a in range (10):
-    scenes += [Scene().add_line(Vector(0, 0, 0), Vector(100, 100, a * 10 + 5), Color(255 if a == 0 else 0, 0 if a == 0 else 255, 0))]
+    scenes += [Scene().add_line(
+        Vector(0, 0, 0),
+        Vector(100, 100, a * 10 + 5),
+        Color(255 if a == 0 else 0, 0 if a == 0 else 255, 255 if a == 9 else 0)
+    )]
 
 data = []
 for scene in scenes:
