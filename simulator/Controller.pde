@@ -1,9 +1,9 @@
 class Controller {
   
   // params
-  private final int DEGREE_ACC = 36;            // radial partitions is 360 / DEGREE_ACC; ie if DEGREE_ACC is 2 then theres 18 radial partitions
-  private final int RADIAL_RES = 4;             // radial resolution, or how many LEDs per blade, whichever you prefer
-  private final int NUM_BLADES = 1;             // i feel this is pretty self-explanitory, but i dont wanna break the comment streak
+  private final int DEGREE_ACC = 90;            // radial partitions is 360 / DEGREE_ACC; ie if DEGREE_ACC is 2 then theres 18 radial partitions
+  private final int RADIAL_RES = 2;             // radial resolution, or how many LEDs per blade, whichever you prefer
+  private final int NUM_BLADES = 10;             // i feel this is pretty self-explanitory, but i dont wanna break the comment streak
   private final float RADIUS_COEF_START = 0.3;  // percentage at which LED's start appearing (size of the whole in the middle)
   
   private final float SCALE_RADIAL = 250; // radial scale factor, for visualization
@@ -23,15 +23,15 @@ class Controller {
     println ("Starting with ", this.numVoxels, " voxels");
     
     // initialize all voxels
-    for (int i = 0; i < int (360.0 / float(this.DEGREE_ACC)); i++) {
+    for (int i = 0; i < this.NUM_BLADES; i++) {
       for (int j = 0; j < this.RADIAL_RES; j++) {
-        for (int k = 0; k < this.NUM_BLADES; k++) {
+        for (int k = 0; k < int (360.0 / float(this.DEGREE_ACC)); k++) {
           
-          float angle = 2 * PI * (i * this.DEGREE_ACC + 0.5 * this.DEGREE_ACC) / 360.0;
+          float angle = 2 * PI * (k * this.DEGREE_ACC + 0.5 * this.DEGREE_ACC) / 360.0;
           
           float radUnit = (1 - this.RADIUS_COEF_START) / this.RADIAL_RES;
           float radius = (float (j) * radUnit + 0.5 * radUnit + this.RADIUS_COEF_START) * this.SCALE_RADIAL;
-          float level = k * this.SCALE_Z;
+          float level = i * this.SCALE_Z;
           float radialWidth = 2 * PI * float(this.DEGREE_ACC) / 360.0;
       
           // all the math is so that the coordiantes are at the middle of the voxels, not on the corners. hence the offsets
