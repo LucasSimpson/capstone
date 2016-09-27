@@ -16,7 +16,7 @@ class Scene:
 
         # calc scaling vector
         scale_vec = Vector(
-            100.0 / Config.NUM_BLADES,
+            100.0 / Config.VOXELS_PER_ROT,
             100.0 / Config.RADIAL_RES,
             100.0 / Config.NUM_BLADES
         )
@@ -26,7 +26,7 @@ class Scene:
         for i in range(Config.NUM_BLADES):
             for j in range(Config.RADIAL_RES):
                 for k in range(Config.VOXELS_PER_ROT):
-                    limits = [
+                    bounds = [
                         Vector(k+1, j+1, i),
                         Vector(k+1, j, i),
                         Vector(k, j, i),
@@ -38,10 +38,10 @@ class Scene:
                     ]
 
                     # scale everything to be in a 100x100x100 coordinate system
-                    limits = map(lambda vec: vec * scale_vec, limits)
+                    bounds = map(lambda vec: vec * scale_vec, bounds)
 
                     # create voxel and add to list
-                    self.voxels += [Voxel(limits)]
+                    self.voxels += [Voxel(bounds)]
 
     # add a line to the scene
     def add_line(self, v1, v2, color):

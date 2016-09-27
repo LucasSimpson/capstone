@@ -11,13 +11,14 @@ from structs.color import Color
 class Voxel:
 
     # init to blank voxel
-    def __init__(self, limits):
+    def __init__(self, bounds):
         self.color = Color(False)
-        self.limits = limits
+        self.bounds = bounds
 
     # determine if a ray intersects a triangle
     # algorigthm from http://geomalgorithms.com/a06-_intersect-2.html
-    def _ray_plane_intersect(self, p0, p1, t0, t1, t2):
+    @staticmethod
+    def _ray_plane_intersect(p0, p1, t0, t1, t2):
 
         # get normal
         u = t1 - t0
@@ -45,25 +46,26 @@ class Voxel:
         s = ((u.dot(v) * w.dot(v)) - (v.dot(v) * w.dot(u))) / denom
         t = ((u.dot(v) * w.dot(u)) - (u.dot(u) * w.dot(v))) / denom
 
+        # return hit or naawww
         return s >= 0 and t >= 0 and s + t <= 1
 
     # return true if line described by v1, v2 intersects voxel
     def hit(self, v1, v2):
 
-        # iter on all triangles comprising the voxel and check for hit
+        # iter on all triangles comprising the voxel boundaries and check for hit
         # dont ask me on the indicies, just trust me
-        # if you're curious; its all 6 six planes describe clockwise facing inwards
+        # if you're curious; its all 6 six planes described clockwise facing inwards
         surfaces = [
-            [self.limits[0], self.limits[3], self.limits[2], self.limits[1]],
-            [self.limits[0], self.limits[1], self.limits[5], self.limits[4]],
-            [self.limits[1], self.limits[2], self.limits[6], self.limits[5]],
-            [self.limits[2], self.limits[3], self.limits[7], self.limits[6]],
-            [self.limits[3], self.limits[0], self.limits[4], self.limits[7]],
-            [self.limits[4], self.limits[5], self.limits[6], self.limits[7]],
+            [self.bounds[0], self.bounds[3], self.bounds[2], self.bounds[1]],
+            [self.bounds[0], self.bounds[1], self.bounds[5], self.bounds[4]],
+            [self.bounds[1], self.bounds[2], self.bounds[6], self.bounds[5]],
+            [self.bounds[2], self.bounds[3], self.bounds[7], self.bounds[6]],
+            [self.bounds[3], self.bounds[0], self.bounds[4], self.bounds[7]],
+            [self.bounds[4], self.bounds[5], self.bounds[6], self.bounds[7]],
         ]
         for surface in surfaces:
-            h1 = self._ray_plane_intersect(v1, v2, surface[0], surface[1], surface[2])
-            h2 = self._ray_plane_intersect(v1, v2, surface[0], surface[2], surface[3])
+            h1 = Voxel._ray_plane_intersect(v1, v2, surface[0], surface[1], surface[2])
+            h2 = Voxel._ray_plane_intersect(v1, v2, surface[0], surface[2], surface[3])
             if h1 or h2:
                 return True
 

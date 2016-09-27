@@ -3,10 +3,21 @@ from printer import Printer
 from structs.color import Color
 from structs.vector import Vector
 
-s = Scene()\
-    .add_line(Vector(10, 10, 10), Vector(40, 10, 10), Color(255, 0, 0))\
-    .add_line(Vector(10, 90, 90), Vector(90, 90, 90), Color(0, 255, 0))
+#s = Scene()\
+#    .add_line(Vector(0, 0, 1), Vector(100, 100, 99), Color(255, 0, 0))
 
-t0 = s.rasterize()
+#t0 = s.rasterize()
 
-Printer.print_out([t0])
+print 'building scenes..'
+scenes = []
+for a in range (10):
+    scenes += [Scene().add_line(Vector(0, 0, 0), Vector(100, 100, a * 10 + 5), Color(255 if a == 0 else 0, 0 if a == 0 else 255, 0))]
+
+data = []
+for scene in scenes:
+    print 'raserrizing..'
+    raster = scene.rasterize()
+    for a in range(12):
+        data += [raster]
+
+Printer.print_out(data)

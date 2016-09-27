@@ -16,15 +16,27 @@ class Vector:
 
     # scalar mult
     def scale(self, scalar):
-        return Vector(self.x * scalar, self.y * scalar, self.z * scalar)
+        return Vector(
+            self.x * scalar,
+            self.y * scalar,
+            self.z * scalar
+        )
 
     # dimension-wise multiplication
     def __mul__(self, other):
-        return Vector(self.x * other.x, self.y * other.y, self.z * other.z)
+        return Vector(
+            self.x * other.x,
+            self.y * other.y,
+            self.z * other.z
+        )
 
     # dot product
     def dot(self, other):
-        return sum([self.x * other.x, self.y * other.y, self.z * other.z])
+        return sum([
+            self.x * other.x,
+            self.y * other.y,
+            self.z * other.z
+        ])
 
     # cross prodcut
     def cross (self, other):
@@ -33,3 +45,6 @@ class Vector:
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x
         )
+
+    def __str__(self):
+        return 'Vector(%s,%s,%s)' % (self.x, self.y, self.z)
