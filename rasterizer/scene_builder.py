@@ -1,11 +1,14 @@
 from config import Config
+
 from structs.voxel import Voxel
 from structs.vector import Vector
+from structs.color import Color
+
 from time_frame import TimeFrame
 
 
 # describes a static image on a high level basis
-class Scene:
+class SceneBuilder:
     # construct blank grid
     def __init__(self):
 
@@ -42,6 +45,11 @@ class Scene:
 
                     # create voxel and add to list
                     self.voxels += [Voxel(bounds)]
+
+    # resets shit for a new scene
+    def new_scene(self):
+        for voxel in self.voxels:
+            voxel.color = Color(False)
 
     # add a line to the scene
     def add_line(self, v1, v2, color):

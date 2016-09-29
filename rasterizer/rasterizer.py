@@ -1,4 +1,4 @@
-from scene import Scene
+from scene_builder import SceneBuilder
 from printer import Printer
 from structs.color import Color
 from structs.vector import Vector
@@ -8,20 +8,21 @@ from structs.vector import Vector
 
 #t0 = s.rasterize()
 
-print 'building scenes..'
-scenes = []
-for a in range (10):
-    scenes += [Scene().add_line(
+print 'Initializing...'
+scene_builder = SceneBuilder()
+
+print 'Rendering...'
+data = []
+for a in range(10):
+    print '%s / 10' % (a)
+    scene_builder.new_scene()
+    scene_builder.add_line(
         Vector(0, 0, 0),
         Vector(100, 100, a * 10 + 5),
         Color(255 if a == 0 else 0, 0 if a == 0 else 255, 255 if a == 9 else 0)
-    )]
-
-data = []
-for scene in scenes:
-    print 'raserrizing..'
-    raster = scene.rasterize()
-    for a in range(12):
-        data += [raster]
+    )
+    raster_data = scene_builder.rasterize()
+    for b in range(12):
+        data += [raster_data]
 
 Printer.print_out(data)
