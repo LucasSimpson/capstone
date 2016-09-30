@@ -2,9 +2,9 @@
 # TODO this (and the simulator) should grab these from same file for parity
 
 class Config:
-    DEGREE_ACC = 60
+    DEGREE_ACC = 10
     RADIAL_RES = 2
-    NUM_BLADES = 2
+    NUM_BLADES = 10
     RADIUS_COEF_START = 0.3
 
     VOXELS_PER_ROT = int(360.0 / DEGREE_ACC)
