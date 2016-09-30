@@ -7,7 +7,7 @@ Camera camera;
 
 void setup () {
   frameRate(RPS);
-  size(800, 600, P3D);
+  size(1000, 800, P3D);
   noStroke();
   
   controller = new Controller();
