@@ -54,7 +54,7 @@ class Voxel:
         # now we check if the hit location is within the triangle describes by t0, t1, t2
         # dont argue formula, check reference
         denom = (u.dot(v))**2 - (u.dot(u) * v.dot(v))
-        w = (p1 - p0).scale(r) - t0
+        w = p0 + (p1 - p0).scale(r) - t0
         s = ((u.dot(v) * w.dot(v)) - (v.dot(v) * w.dot(u))) / denom
         t = ((u.dot(v) * w.dot(u)) - (u.dot(u) * w.dot(v))) / denom
 
