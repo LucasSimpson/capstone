@@ -51,6 +51,9 @@ class SceneBuilder:
         for voxel in self.voxels:
             voxel.color = Color(False)
 
+        # freaking 2 chainz over here...
+        return self
+
     # add a line to the scene
     def add_line(self, v1, v2, color):
         # calc intersection of line with all voxels and colorize

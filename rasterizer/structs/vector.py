@@ -6,6 +6,14 @@ class Vector:
         self.y = 1.0 * y
         self.z = 1.0 * z
 
+    # dimension-wise addition
+    def __add__(self, other):
+        return Vector(
+            self.x + other.x,
+            self.y + other.y,
+            self.z + other.z
+        )
+
     # dimension-wise subtraction
     def __sub__(self, other):
         return Vector(

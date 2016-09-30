@@ -1,5 +1,5 @@
 class Printer:
-    filename = "data.txt"
+    filename = "../simulator/data/data.txt"
 
     @classmethod
     def print_out(clz, time_frames):

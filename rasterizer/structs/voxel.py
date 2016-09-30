@@ -15,6 +15,18 @@ class Voxel:
         self.color = Color(False)
         self.bounds = bounds
 
+        # iter on all triangles comprising the voxel boundaries and check for hit
+        # dont ask me on the indicies, just trust me
+        # if you're curious; its all 6 six planes described clockwise facing inwards
+        self.surfaces = [
+            [self.bounds[0], self.bounds[3], self.bounds[2], self.bounds[1]],
+            [self.bounds[0], self.bounds[1], self.bounds[5], self.bounds[4]],
+            [self.bounds[1], self.bounds[2], self.bounds[6], self.bounds[5]],
+            [self.bounds[2], self.bounds[3], self.bounds[7], self.bounds[6]],
+            [self.bounds[3], self.bounds[0], self.bounds[4], self.bounds[7]],
+            [self.bounds[4], self.bounds[5], self.bounds[6], self.bounds[7]],
+        ]
+
     # determine if a ray intersects a triangle
     # algorigthm from http://geomalgorithms.com/a06-_intersect-2.html
     @staticmethod
@@ -51,22 +63,11 @@ class Voxel:
 
     # return true if line described by v1, v2 intersects voxel
     def hit(self, v1, v2):
+        for surface in self.surfaces:
+            if Voxel._ray_plane_intersect(v1, v2, surface[0], surface[1], surface[2]):
+                return True
 
-        # iter on all triangles comprising the voxel boundaries and check for hit
-        # dont ask me on the indicies, just trust me
-        # if you're curious; its all 6 six planes described clockwise facing inwards
-        surfaces = [
-            [self.bounds[0], self.bounds[3], self.bounds[2], self.bounds[1]],
-            [self.bounds[0], self.bounds[1], self.bounds[5], self.bounds[4]],
-            [self.bounds[1], self.bounds[2], self.bounds[6], self.bounds[5]],
-            [self.bounds[2], self.bounds[3], self.bounds[7], self.bounds[6]],
-            [self.bounds[3], self.bounds[0], self.bounds[4], self.bounds[7]],
-            [self.bounds[4], self.bounds[5], self.bounds[6], self.bounds[7]],
-        ]
-        for surface in surfaces:
-            h1 = Voxel._ray_plane_intersect(v1, v2, surface[0], surface[1], surface[2])
-            h2 = Voxel._ray_plane_intersect(v1, v2, surface[0], surface[2], surface[3])
-            if h1 or h2:
+            if Voxel._ray_plane_intersect(v1, v2, surface[0], surface[2], surface[3]):
                 return True
 
         return False
