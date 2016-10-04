@@ -2,8 +2,8 @@ from config import Config
 
 from structs.voxel import Voxel
 from structs.color import Color
-from structs.point import Point
-from structs.plane import Plane
+
+from bin.collisions import ray_plane_intersection
 
 from time_frame import TimeFrame
 
@@ -34,104 +34,16 @@ class SceneBuilder:
 
         # create blank voxels
         # order is important!
-        voxels = [[[Voxel() for i in range(Z)] for j in range(Y)] for k in range(X)]
+        voxels = [[[Voxel(
+            np.array([i, j + 0.5, k + 0.5]) * scale_vec,
+            np.array([i + 1, j + 0.5, k + 0.5]) * scale_vec,
+        ) for i in range(Z)] for j in range(Y)] for k in range(X)]
 
-        # create all points
-        points = [[[Point(i, j, k) for i in range(Z+1)] for j in range(Y+1)] for k in range(X+1)]
-
-        # create all planes and assign to voxels
-        # XY planes
-        self.planes = []
-        for i in range(X):
-            for j in range(Y):
-                for k in range(Z + 1):
-                    # create
-                    p1 = Plane(
-                        points[i][j][k],
-                        points[i + 1][j][k],
-                        points[i][j + 1][k]
-                    )
-                    p2 = Plane(
-                        points[i + 1][j + 1][k],
-                        points[i + 1][j][k],
-                        points[i][j + 1][k]
-                    )
-
-                    # assign
-                    self.planes += [p1, p2]
-                    if k != 0:
-                        p1.add_voxel(voxels[i][j][k - 1])
-                        p2.add_voxel(voxels[i][j][k - 1])
-                    if k != Z:
-                        p1.add_voxel(voxels[i][j][k])
-                        p2.add_voxel(voxels[i][j][k])
-
-
-        # XZ
-        for i in range(X):
-            for j in range(Y + 1):
-                for k in range(Z):
-                    # create
-                    p1 = Plane(
-                        points[i][j][k],
-                        points[i + 1][j][k],
-                        points[i][j][k + 1]
-                    )
-                    p2 = Plane(
-                        points[i + 1][j][k + 1],
-                        points[i + 1][j][k],
-                        points[i][j][k + 1]
-                    )
-
-                # assign
-                self.planes += [p1, p2]
-                if j != 0:
-                    p1.add_voxel(voxels[i][j - 1][k])
-                    p2.add_voxel(voxels[i][j - 1][k])
-                if j != Y:
-                    p1.add_voxel(voxels[i][j][k])
-                    p2.add_voxel(voxels[i][j][k])
-
-        # YZ
-        for i in range(X + 1):
-            for j in range(Y):
-                for k in range(Z):
-                    p1 = Plane(
-                        points[i][j][k],
-                        points[i][j + 1][k],
-                        points[i][j][k + 1]
-                    )
-                    p2 = Plane(
-                        points[i][j + 1][k + 1],
-                        points[i][j + 1][k],
-                        points[i][j][k + 1]
-                    )
-
-                    # assign
-                    self.planes += [p1, p2]
-                    if i != 0:
-                        p1.add_voxel(voxels[i - 1][j][k])
-                        p2.add_voxel(voxels[i - 1][j][k])
-                    if i != X:
-                        p1.add_voxel(voxels[i][j][k])
-                        p2.add_voxel(voxels[i][j][k])
-
-        # flatten points list
-        self.points = []
-        for i in points:
-            for j in i:
-                self.points += j
-
-        # flatten voxels list
+        # flatten voxels
         self.voxels = []
         for i in voxels:
             for j in i:
                 self.voxels += j
-
-        # scale shit so thats its all in a 100x100x100 CS
-        for point in self.points:
-            point.vector = point.vector * scale_vec
-
 
     # resets shit for a new scene
     def new_scene(self):
@@ -141,16 +53,18 @@ class SceneBuilder:
         # freaking 2 chainz over here...
         return self
 
-    # add a line to the scene
-    def add_line(self, v1, v2, color):
-        # calc intersection of line with all voxels and colorize
-        for plane in self.planes:
-            if plane.hit(v1, v2):
-                for voxel in plane.voxels:
-                    voxel.color = color
 
-        # chaining, fuck yea
+    # add a plane for intersection with
+    def add_plane(self, p0, p1, p2, color):
+
+        # iter voxels and check collision
+        for voxel in self.voxels:
+            if ray_plane_intersection(voxel.r0, voxel.r1, p0, p1, p2):
+                voxel.color = color
+
+        # chainin FTW
         return self
+
 
     # export to TimeFrame class
     def rasterize(self):
