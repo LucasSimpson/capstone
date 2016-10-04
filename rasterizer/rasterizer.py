@@ -20,15 +20,11 @@ data = []
 for a in range (10):
     raster_data = scene_builder\
         .new_scene()\
-        .add_line(
-            np.array([0, 100, a * 10 + 5]),
-            np.array([100, 100, a * 10 + 5]),
-            Color(255 if a == 0 else 0, 0 if a == 0 or a == 9 else 255, 255 if a == 9 else 0)
-        )\
-        .add_line(
-            np.array([0, 0, 100 - a * 10 - 5]),
-            np.array([100, 0, 100 - a * 10 - 5]),
-            Color(255 if a == 0 else 0, 0 if a == 0 or a == 9 else 255, 255 if a == 9 else 0)
+        .add_plane(
+            np.array([a * 10, 50, 50]),
+            np.array([a * 10, 50, 0]),
+            np.array([a * 10, 0, 50]),
+            Color(255 if a == 0 else 128, 0 if a == 0 or a == 9 else 255, 255 if a == 9 else 64)
         )\
         .rasterize()
 
