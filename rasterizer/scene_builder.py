@@ -1,12 +1,13 @@
 from config import Config
 
 from structs.voxel import Voxel
-from structs.vector import Vector
 from structs.color import Color
 from structs.point import Point
 from structs.plane import Plane
 
 from time_frame import TimeFrame
+
+import numpy as np
 
 
 # describes a static image on a high level basis
@@ -20,11 +21,11 @@ class SceneBuilder:
         #                width         *   depth      *     height
 
         # calc scaling vector
-        scale_vec = Vector(
+        scale_vec = np.array([
             100.0 / Config.VOXELS_PER_ROT,
             100.0 / Config.RADIAL_RES,
             100.0 / Config.NUM_BLADES
-        )
+        ])
 
         # rename some params for readability
         X = Config.NUM_BLADES

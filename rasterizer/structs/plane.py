@@ -1,5 +1,4 @@
-from point import Point
-
+import numpy as np
 
 # describes a plane, comprised of 3 points
 # we also keep a list of the voxels the plane is a part of
@@ -21,10 +20,16 @@ class Plane:
         # get normal
         u = self.p1.vector - self.p0.vector
         v = self.p2.vector - self.p0.vector
-        normal = (u).cross(v)
+
+        # implementing this by hand is faster than np.cross()
+        normal = np.array([
+            u[1]*v[2] - u[2]*v[1],
+            u[2]*v[0] - u[0]*v[2],
+            u[0]*v[1] - u[1]*v[0],
+        ])
 
         # calc if perfectly co-planar. unlikely, but check just in case
-        denom = normal.dot(r1 - r0)
+        denom = np.dot(normal, r1 - r0)
         if denom == 0:
             # if co-planar, return false. We dont have time for such subtleties
             return False
@@ -40,9 +45,9 @@ class Plane:
         # now we check if the hit location is within the triangle describes by t0, t1, t2
         # dont argue formula, check reference
         denom = (u.dot(v))**2 - (u.dot(u) * v.dot(v))
-        w = r0 + (r1 - r0).scale(r) - self.p0.vector
-        s = ((u.dot(v) * w.dot(v)) - (v.dot(v) * w.dot(u))) / denom
-        t = ((u.dot(v) * w.dot(u)) - (u.dot(u) * w.dot(v))) / denom
+        w = r0 + (r1 - r0)*r - self.p0.vector
+        s = ((np.dot(u, v) * np.dot(w, v)) - (np.dot(v, v) * np.dot(w, u))) / denom
+        t = ((np.dot(u, v) * np.dot(w, u)) - (np.dot(u, u) * np.dot(w, v))) / denom
 
         # return hit or naawww
         return s >= 0 and t >= 0 and s + t <= 1

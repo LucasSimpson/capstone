@@ -2,8 +2,8 @@
 # TODO this (and the simulator) should grab these from same file for parity
 
 class Config:
-    DEGREE_ACC = 10
-    RADIAL_RES = 2
+    DEGREE_ACC = 2
+    RADIAL_RES = 10
     NUM_BLADES = 10
     RADIUS_COEF_START = 0.3
 
