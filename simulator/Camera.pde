@@ -60,10 +60,10 @@ class Camera {
     for (Voxel voxel: voxels) {
       if (voxel.render) {
         this.renderVoxel(voxel);
-      } /* temp debugging hack, draw non-rendered as gray else {
+      } /* temp debugging hack, draw non-rendered as gray */ else {
         voxel.c = color(215);
         this.renderVoxel(voxel);
-      } */
+      }
     }
   }
   

@@ -3,6 +3,8 @@ from config import Config
 from structs.voxel import Voxel
 from structs.vector import Vector
 from structs.color import Color
+from structs.point import Point
+from structs.plane import Plane
 
 from time_frame import TimeFrame
 
@@ -24,27 +26,112 @@ class SceneBuilder:
             100.0 / Config.NUM_BLADES
         )
 
-        # calc all voxels
+        # rename some params for readability
+        X = Config.NUM_BLADES
+        Y = Config.RADIAL_RES
+        Z = Config.VOXELS_PER_ROT
+
+        # create blank voxels
+        # order is important!
+        voxels = [[[Voxel() for i in range(Z)] for j in range(Y)] for k in range(X)]
+
+        # create all points
+        points = [[[Point(i, j, k) for i in range(Z+1)] for j in range(Y+1)] for k in range(X+1)]
+
+        # create all planes and assign to voxels
+        # XY planes
+        self.planes = []
+        for i in range(X):
+            for j in range(Y):
+                for k in range(Z + 1):
+                    # create
+                    p1 = Plane(
+                        points[i][j][k],
+                        points[i + 1][j][k],
+                        points[i][j + 1][k]
+                    )
+                    p2 = Plane(
+                        points[i + 1][j + 1][k],
+                        points[i + 1][j][k],
+                        points[i][j + 1][k]
+                    )
+
+                    # assign
+                    self.planes += [p1, p2]
+                    if k != 0:
+                        p1.add_voxel(voxels[i][j][k - 1])
+                        p2.add_voxel(voxels[i][j][k - 1])
+                    if k != Z:
+                        p1.add_voxel(voxels[i][j][k])
+                        p2.add_voxel(voxels[i][j][k])
+
+
+        # XZ
+        for i in range(X):
+            for j in range(Y + 1):
+                for k in range(Z):
+                    # create
+                    p1 = Plane(
+                        points[i][j][k],
+                        points[i + 1][j][k],
+                        points[i][j][k + 1]
+                    )
+                    p2 = Plane(
+                        points[i + 1][j][k + 1],
+                        points[i + 1][j][k],
+                        points[i][j][k + 1]
+                    )
+
+                # assign
+                self.planes += [p1, p2]
+                if j != 0:
+                    p1.add_voxel(voxels[i][j - 1][k])
+                    p2.add_voxel(voxels[i][j - 1][k])
+                if j != Y:
+                    p1.add_voxel(voxels[i][j][k])
+                    p2.add_voxel(voxels[i][j][k])
+
+        # YZ
+        for i in range(X + 1):
+            for j in range(Y):
+                for k in range(Z):
+                    p1 = Plane(
+                        points[i][j][k],
+                        points[i][j + 1][k],
+                        points[i][j][k + 1]
+                    )
+                    p2 = Plane(
+                        points[i][j + 1][k + 1],
+                        points[i][j + 1][k],
+                        points[i][j][k + 1]
+                    )
+
+                    # assign
+                    self.planes += [p1, p2]
+                    if i != 0:
+                        p1.add_voxel(voxels[i - 1][j][k])
+                        p2.add_voxel(voxels[i - 1][j][k])
+                    if i != X:
+                        p1.add_voxel(voxels[i][j][k])
+                        p2.add_voxel(voxels[i][j][k])
+
+        # flatten points list
+        self.points = []
+        for i in points:
+            for j in i:
+                self.points += j
+
+        # flatten voxels list
         self.voxels = []
-        for i in range(Config.NUM_BLADES):
-            for j in range(Config.RADIAL_RES):
-                for k in range(Config.VOXELS_PER_ROT):
-                    bounds = [
-                        Vector(k+1, j+1, i),
-                        Vector(k+1, j, i),
-                        Vector(k, j, i),
-                        Vector(k, j+1, i),
-                        Vector(k + 1, j + 1, i+1),
-                        Vector(k + 1, j, i+1),
-                        Vector(k, j, i+1),
-                        Vector(k, j + 1, i+1),
-                    ]
+        for i in voxels:
+            for j in i:
+                self.voxels += j
 
-                    # scale everything to be in a 100x100x100 coordinate system
-                    bounds = map(lambda vec: vec * scale_vec, bounds)
+        # scale shit so thats its all in a 100x100x100 CS
+        for point in self.points:
+            print point
+            point.vector = point.vector * scale_vec
 
-                    # create voxel and add to list
-                    self.voxels += [Voxel(bounds)]
 
     # resets shit for a new scene
     def new_scene(self):
@@ -57,9 +144,10 @@ class SceneBuilder:
     # add a line to the scene
     def add_line(self, v1, v2, color):
         # calc intersection of line with all voxels and colorize
-        for voxel in self.voxels:
-            if voxel.hit(v1, v2):
-                voxel.color = color
+        for plane in self.planes:
+            if plane.hit(v1, v2):
+                for voxel in plane.voxels:
+                    voxel.color = color
 
         # chaining, fuck yea
         return self
