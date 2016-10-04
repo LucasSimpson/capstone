@@ -129,7 +129,6 @@ class SceneBuilder:
 
         # scale shit so thats its all in a 100x100x100 CS
         for point in self.points:
-            print point
             point.vector = point.vector * scale_vec
 
 
