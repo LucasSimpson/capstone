@@ -13,7 +13,7 @@ import numpy as np
 # (clockwise, inner -> outer, bottom -> top)
 
 print 'Initializing...'
-scene_builder = SceneBuilder()
+scene_builder = SceneBuilder(SceneBuilder.CS_RECT)
 
 print 'Rendering...'
 data = []
