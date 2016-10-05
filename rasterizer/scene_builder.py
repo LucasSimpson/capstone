@@ -1,13 +1,10 @@
-from config import Config
-
-from structs.voxel import Voxel
-from structs.color import Color
+import numpy as np
 
 from bin.collisions import ray_plane_intersection
-
+from config import Config
+from structs.color import Color
+from structs.voxel import Voxel
 from time_frame import TimeFrame
-
-import numpy as np
 
 
 # describes a static image on a high level basis
@@ -28,16 +25,26 @@ class SceneBuilder:
         ])
 
         # rename some params for readability
-        X = Config.NUM_BLADES
+        X = Config.VOXELS_PER_ROT
         Y = Config.RADIAL_RES
-        Z = Config.VOXELS_PER_ROT
+        Z = Config.NUM_BLADES
 
+        voxels = [[[Voxel(
+            # np.array([i, j + 0.5, k + 0.5]) * scale_vec,
+            # np.array([i + 1, j + 0.5, k + 0.5]) * scale_vec,
+            np.array([
+                50.0 * (float(j) / Y) * np.sin(2 * np.pi * float(i) / X) + 50,
+                50.0 * (float(j) / Y) * np.cos(2 * np.pi * float(i) / X) + 50,
+                100.0 * (float(k) / Z),
+            ]),
+            np.array([
+                50.0 * (float(j) / Y) * np.sin(2 * np.pi * (float(i) + 1) / X) + 50,
+                50.0 * (float(j) / Y) * np.cos(2 * np.pi * (float(i) + 1) / X) + 50,
+                100.0 * (float(k) / Z),
+            ]),
+        ) for i in range(X)] for j in range(Y)] for k in range(Z)]
         # create blank voxels
         # order is important!
-        voxels = [[[Voxel(
-            np.array([i, j + 0.5, k + 0.5]) * scale_vec,
-            np.array([i + 1, j + 0.5, k + 0.5]) * scale_vec,
-        ) for i in range(Z)] for j in range(Y)] for k in range(X)]
 
         # flatten voxels
         self.voxels = []

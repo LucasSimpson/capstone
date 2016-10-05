@@ -17,18 +17,25 @@ scene_builder = SceneBuilder()
 
 print 'Rendering...'
 data = []
-for a in range (10):
+for a in range (100):
+    print '%s/100' % (a)
+
     raster_data = scene_builder\
-        .new_scene()\
+        .new_scene() \
         .add_plane(
-            np.array([a * 10, 50, 50]),
-            np.array([a * 10, 50, 0]),
-            np.array([a * 10, 0, 50]),
-            Color(255 if a == 0 else 128, 0 if a == 0 or a == 9 else 255, 255 if a == 9 else 64)
+            np.array([a, 100, 100]),
+            np.array([a, 100, 0]),
+            np.array([a, 0, 100]),
+            Color(255, 128, 0)
+        )\
+        .add_plane(
+            np.array([a, 0, 0]),
+            np.array([a, 100, 0]),
+            np.array([a, 0, 100]),
+            Color(0, 128, 255)
         )\
         .rasterize()
 
-    for b in range(10):
-        data += [raster_data]
+    data += [raster_data]
 
 Printer.print_out(data)
