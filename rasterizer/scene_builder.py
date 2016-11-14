@@ -2,6 +2,7 @@ import numpy as np
 
 from bin.collisions import ray_plane_intersection
 from config import Config
+from raster.base import Rasterizable
 from structs.color import Color
 from structs.voxel import Voxel
 from time_frame import TimeFrame
@@ -68,6 +69,18 @@ class SceneBuilder:
             voxel.color = Color(False)
 
         # freaking 2 chainz over here...
+        return self
+
+
+    # add object to scene
+    def add_object(self, raster_object):
+        assert issubclass(raster_object.__class__, Rasterizable)
+
+        # have object deal with each voxel
+        for voxel in self.voxels:
+            raster_object.deal_with(voxel)
+
+        # chainzzz
         return self
 
 

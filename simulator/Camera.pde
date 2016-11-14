@@ -63,7 +63,7 @@ class Camera {
       } /* temp debugging hack, draw non-rendered as gray else {
         voxel.c = color(215);
         this.renderVoxel(voxel);
-      } */ 
+      } */
     }
   }
   

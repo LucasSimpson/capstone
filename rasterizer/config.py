@@ -3,7 +3,7 @@
 
 class Config:
     DEGREE_ACC = 2
-    RADIAL_RES = 10
+    RADIAL_RES = 20
     NUM_BLADES = 10
     RADIUS_COEF_START = 0.3
 
