@@ -2,7 +2,7 @@ class Controller {
   
   // params
   private final int DEGREE_ACC = 2;            // radial partitions is 360 / DEGREE_ACC; ie if DEGREE_ACC is 2 then theres 18 radial partitions
-  private final int RADIAL_RES = 10;             // radial resolution, or how many LEDs per blade, whichever you prefer
+  private final int RADIAL_RES = 20;             // radial resolution, or how many LEDs per blade, whichever you prefer
   private final int NUM_BLADES = 10;             // i feel this is pretty self-explanitory, but i dont wanna break the comment streak
   private final float RADIUS_COEF_START = 0.0;  // percentage at which LED's start appearing (size of the whole in the middle)
   
