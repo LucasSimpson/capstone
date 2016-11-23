@@ -62,7 +62,6 @@ class SceneBuilder:
             for j in i:
                 self.voxels += j
 
-
     # resets shit for a new scene
     def new_scene(self):
         for voxel in self.voxels:
@@ -70,7 +69,6 @@ class SceneBuilder:
 
         # freaking 2 chainz over here...
         return self
-
 
     # add object to scene
     def add_object(self, raster_object):
@@ -83,7 +81,6 @@ class SceneBuilder:
         # chainzzz
         return self
 
-
     # add a plane for intersection with
     def add_plane(self, p0, p1, p2, color):
 
@@ -94,7 +91,6 @@ class SceneBuilder:
 
         # chainin FTW
         return self
-
 
     # export to TimeFrame class
     def rasterize(self):

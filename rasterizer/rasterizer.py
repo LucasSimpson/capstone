@@ -1,7 +1,8 @@
-from scene_builder import SceneBuilder
-from printer import Printer
-from structs.color import Color
 import numpy as np
+
+from printers.base import Printer
+from scene_builder import SceneBuilder
+from structs.color import Color
 
 # benchmarking
 # vector: 33.5s on hit func

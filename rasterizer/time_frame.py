@@ -5,13 +5,13 @@
 from config import Config
 from structs.color import Color
 
+
 # describes 1 frame
 class TimeFrame:
 
     # initializer
     def __init__(self, colors):
         self.colors = colors
-
 
     # return lines of string values for write out
     def write_out(self):

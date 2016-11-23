@@ -1,9 +1,8 @@
-from scene_builder import SceneBuilder
-from printer import Printer
-from structs.color import Color
 import numpy as np
 
 from raster.base import Shape, Polygon
+from scene_builder import SceneBuilder
+from structs.color import Color
 
 s = Shape([
     Polygon(
@@ -30,8 +29,8 @@ scene_builder = SceneBuilder(SceneBuilder.CS_RECT)
 
 print 'Rendering...'
 data = []
-for a in range (10):
-    print '%s/100' % (a)
+for a in range (1):
+    print '%s/10' % (a)
 
     raster_data = scene_builder\
         .new_scene() \
@@ -40,4 +39,10 @@ for a in range (10):
 
     data += [raster_data]
 
-Printer.print_out(data)
+# from printers.file_printer import FilePrinter
+# printer = FilePrinter(filename="../simulator/data/data.txt")
+
+from printers.arduino_printer import ArduinoPrinter
+printer = ArduinoPrinter()
+
+printer.print_out(data)

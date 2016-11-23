@@ -1,7 +1,7 @@
 # describes a color, and how to write out
 class Color:
 
-    # hack to enable dual constroctor
+    # hack to enable dual constructor
     # either Color(255, 255, 255) to draw a color
     # or Color(false) to not draw
     def __init__(self, r, g=0, b=0):
