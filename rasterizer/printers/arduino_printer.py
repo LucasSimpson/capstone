@@ -48,8 +48,11 @@ class ArduinoPrinter(Printer):
             # rebuild 3D list
             data = [[[color_data[a*Z + b*Y + c*X] for c in range(X)] for b in range(Y)] for a in range(Z)]
 
-            # rotate every other element on 2nd dimension
-            # TODO implement this lol
+            # rotate every other element on 2nd dimension by 1/2
+            for a in range(len(data)):
+                if a % 2 == 0:
+                    l = len(data[a])
+                    data[a] = data[a][l/2:] + data[a][:l/2]
 
             # flatten
             color_data = []
